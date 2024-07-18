@@ -2,6 +2,8 @@ package cz.diamo.vratnice_public.controller;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -14,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-public class LokalitaController {
+public class LokalitaController extends BaseController  {
+    final static Logger logger = LogManager.getLogger(LokalitaController.class);
 
     @Autowired
     private VratniceService vratniceService;
