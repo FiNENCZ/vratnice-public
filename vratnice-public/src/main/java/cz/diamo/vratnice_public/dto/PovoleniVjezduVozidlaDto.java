@@ -1,6 +1,5 @@
 package cz.diamo.vratnice_public.dto;
 
-import cz.diamo.vratnice_public.dto.ZavodDto;
 import cz.diamo.vratnice_public.entity.Zavod;
 import cz.diamo.vratnice_public.entity.PovoleniVjezduVozidla;
 import cz.diamo.vratnice_public.entity.VozidloTyp;

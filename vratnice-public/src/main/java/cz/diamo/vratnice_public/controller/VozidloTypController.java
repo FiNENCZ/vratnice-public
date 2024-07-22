@@ -1,6 +1,5 @@
 package cz.diamo.vratnice_public.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -12,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import cz.diamo.vratnice_public.dto.StatDto;
 import cz.diamo.vratnice_public.dto.VozidloTypDto;
+import cz.diamo.vratnice_public.exception.BaseException;
 import cz.diamo.vratnice_public.service.VratniceService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -29,5 +28,12 @@ public class VozidloTypController extends BaseController {
     public ResponseEntity<List<VozidloTypDto>> list(HttpServletRequest request, @RequestParam @Nullable Boolean withIZS ) {
         return ResponseEntity.ok(vratniceService.seznamVozidloTyp(withIZS));
     }
+
+    @GetMapping("vozidlo-typ/get-by-nazev")
+    public ResponseEntity<VozidloTypDto> getByNazev(@RequestParam String nazev) throws BaseException {
+        logger.info(nazev);
+        return ResponseEntity.ok(vratniceService.getVozidloTypByNazev(nazev));
+    }
+    
 
 }

@@ -2,7 +2,6 @@ package cz.diamo.vratnice_public.dto;
 
 import java.io.Serializable;
 
-import cz.diamo.vratnice_public.dto.ZavodDto;
 import cz.diamo.vratnice_public.entity.Zavod;
 import cz.diamo.vratnice_public.entity.Lokalita;
 import jakarta.validation.constraints.NotBlank;
