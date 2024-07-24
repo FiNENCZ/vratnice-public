@@ -6,16 +6,12 @@
     "configurations": [
         {
             "type": "java",
-            "name": "Current File",
-            "request": "launch",
-            "mainClass": "${file}"
-        },
-        {
-            "type": "java",
-            "name": "VratnicePublicApplication",
+            "name": "Vratnice-public dev",
             "request": "launch",
             "mainClass": "cz.diamo.vratnice_public.VratnicePublicApplication",
-            "projectName": "vratnice-public"
+            "projectName": "vratnice-public",
+            "args": "--spring.profiles.active=dev",
+            "vmArgs": "-Dspring.profiles.active=dev"
         }
     ]
 }

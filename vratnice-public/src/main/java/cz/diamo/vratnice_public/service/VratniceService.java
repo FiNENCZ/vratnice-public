@@ -47,8 +47,11 @@ public class VratniceService {
     @TransactionalROE
     public List<LokalitaDto> seznamLokalit(String idZavod) {
         String url = "/vratnice-public/lokalita/list";
+        String lang = LocaleContextHolder.getLocale().getLanguage();
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("idZavod", idZavod);
+                .queryParam("idZavod", idZavod)
+                .queryParam("lang", lang);
 
         try {
             LokalitaDto[] response = restVratnice.getForObject(builder.toUriString(), LokalitaDto[].class);
@@ -63,9 +66,11 @@ public class VratniceService {
     @TransactionalROE
     public List<ZavodDto> seznamZavodu(Boolean aktivni, String idZavod) {
         String url = "/vratnice-public/zavod/list";
+        String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("aktivni", aktivni)
-                .queryParam("idZavod", idZavod);
+                .queryParam("idZavod", idZavod)
+                .queryParam("lang", lang);
 
         try {
             ZavodDto[] response = restVratnice.getForObject(builder.toUriString(), ZavodDto[].class);
@@ -79,8 +84,10 @@ public class VratniceService {
     @TransactionalROE
     public List<VozidloTypDto> seznamVozidloTyp(Boolean withIZS) {
         String url = "/vratnice-public/vozidlo-typ/list";
+        String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("withIZS", withIZS);
+                .queryParam("withIZS", withIZS)
+                .queryParam("lang", lang);
 
         try {
             VozidloTypDto[] response = restVratnice.getForObject(builder.encode().toUriString(), VozidloTypDto[].class);
@@ -95,12 +102,14 @@ public class VratniceService {
     @TransactionalROE
     public VozidloTypDto getVozidloTypByNazev(String nazev) throws BaseException {
         try {
-        logger.info(nazev);
-    
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
+        String lang = LocaleContextHolder.getLocale().getLanguage();
         HashMap<String, String> params = new HashMap<>();
-        params.put("nazev", nazev);
-        ResponseEntity<VozidloTypDto> result = restVratnice.exchange("/vratnice-public/vozidlo-typ/get-by-nazev?nazev={nazev}", HttpMethod.GET, requestEntity, VozidloTypDto.class, params);
+        params.put("nazev", nazev); 
+        params.put("lang", lang);
+        
+        ResponseEntity<VozidloTypDto> result = restVratnice.exchange("/vratnice-public/vozidlo-typ/get-by-nazev?nazev={nazev}&lang={lang}", HttpMethod.GET, requestEntity, VozidloTypDto.class, params);
+        
         if (result.getStatusCode().isError())
             throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
         return result.getBody();
@@ -131,8 +140,10 @@ public class VratniceService {
     @TransactionalROE
     public RidicDto getRidicByCisloOp(String cisloOp) {
         String url = "/vratnice-public/ridic/get-by-cislo-op";
+        String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
-                .queryParam("cisloOp", cisloOp);
+                .queryParam("cisloOp", cisloOp)
+                .queryParam("lang", lang);
 
         try {
             RidicDto response = restVratnice.getForObject(builder.toUriString(), RidicDto.class);
@@ -147,7 +158,9 @@ public class VratniceService {
     @TransactionalROE
     public List<StatDto> seznamStatu() {
         String url = "/vratnice-public/stat/list";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+        String lang = LocaleContextHolder.getLocale().getLanguage();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
+            .queryParam("lang", lang);;
 
         try {
             StatDto[] response = restVratnice.getForObject(builder.toUriString(), StatDto[].class);
@@ -162,9 +175,14 @@ public class VratniceService {
     public StatDto getStatByNazev(String nazev) throws BaseException {
         try {
         HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
+        String lang = LocaleContextHolder.getLocale().getLanguage();
+
+
         HashMap<String, String> params = new HashMap<>();
-        params.put("nazev", nazev);
-        ResponseEntity<StatDto> result = restVratnice.exchange("/vratnice-public/stat/get-by-nazev?nazev={nazev}", HttpMethod.GET, requestEntity, StatDto.class, params);
+        params.put("nazev", nazev); 
+        params.put("lang", lang);
+        
+        ResponseEntity<StatDto> result = restVratnice.exchange("/vratnice-public/stat/get-by-nazev?nazev={nazev}&lang={lang}", HttpMethod.GET, requestEntity, StatDto.class, params);
         if (result.getStatusCode().isError())
             throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
         return result.getBody();
@@ -195,7 +213,9 @@ public class VratniceService {
     @TransactionalROE
     public RidicDto saveRidic(RidicDto ridicDto) {
         String url = "/vratnice-public/ridic/save";
-        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+        String lang = LocaleContextHolder.getLocale().getLanguage();
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
+            .queryParam("lang", lang);
 
         try {
             RidicDto response = restVratnice.postForObject(builder.toUriString(), ridicDto, RidicDto.class);

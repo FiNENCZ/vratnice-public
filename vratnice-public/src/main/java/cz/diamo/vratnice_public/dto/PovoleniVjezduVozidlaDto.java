@@ -43,6 +43,7 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
     private String duvodZadosti;
 
     @NotNull(message = "{povoleni.vjezdu.vozidla.rz_vozidla.require}")
+    @NotEmpty(message = "{povoleni.vjezdu.vozidla.rz_vozidla.require}")
     private List<String> rzVozidla;
 
     @NotNull(message = "{povoleni.vjezdu.vozidla.typ_vozidla.require}")

@@ -6,7 +6,6 @@ import java.util.List;
 
 
 //import cz.diamo.vratnice_public.constants.Constants;
-import cz.diamo.vratnice_public.entity.Zavod;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

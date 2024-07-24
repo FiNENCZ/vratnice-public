@@ -31,7 +31,6 @@ public class VozidloTypController extends BaseController {
 
     @GetMapping("vozidlo-typ/get-by-nazev")
     public ResponseEntity<VozidloTypDto> getByNazev(@RequestParam String nazev) throws BaseException {
-        logger.info(nazev);
         return ResponseEntity.ok(vratniceService.getVozidloTypByNazev(nazev));
     }
     
