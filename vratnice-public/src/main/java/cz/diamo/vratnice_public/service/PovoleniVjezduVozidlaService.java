@@ -43,11 +43,30 @@ public class PovoleniVjezduVozidlaService {
     private Validator validator;
 
 
+    public PovoleniVjezduVozidlaDto create(PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto) {
+        if (povoleniVjezduVozidlaDto.getRidic() != null) {
+            RidicDto savedRidic =  vratniceService.saveRidic(povoleniVjezduVozidlaDto.getRidic());
+            povoleniVjezduVozidlaDto.setRidic(savedRidic);
+        }
+
+        //TODO: zaslání na žádosti
+
+        return povoleniVjezduVozidlaDto;
+    }
+
     public Set<PovoleniVjezduVozidlaDto>  processPovoleniCsvData(MultipartFile file) throws IOException, ParseException, BaseException {
         Set<PovoleniVjezduVozidlaDto> povoleniVjezduVozidlas = parsePovoleniCsv(file);
+        Set<PovoleniVjezduVozidlaDto> savedDtos = new HashSet<>();
 
-        return povoleniVjezduVozidlas;
+        for (PovoleniVjezduVozidlaDto dto : povoleniVjezduVozidlas) {
+            PovoleniVjezduVozidlaDto savedEntity = create(dto); 
+            savedDtos.add(savedEntity);
+        }
+    
+
+        return savedDtos;
     }
+    
 
     private Set<PovoleniVjezduVozidlaDto> parsePovoleniCsv(MultipartFile file) throws IOException, ParseException, BaseException {
         try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {

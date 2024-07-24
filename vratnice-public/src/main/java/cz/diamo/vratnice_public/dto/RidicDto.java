@@ -26,7 +26,7 @@ public class RidicDto implements Serializable {
     private String prijmeni;
 
     @NotBlank(message = "{ridic.cisloOp.require}")
-    @Size(max = 9, message = "{ridic.cisloOp.max.9}")
+    @Size(max = 9, min = 9, message = "{ridic.cisloOp.max.9}")
     @Pattern(regexp = "\\d+", message = "{ridic.cisloOp.pattern}")
     private String cisloOp;
 

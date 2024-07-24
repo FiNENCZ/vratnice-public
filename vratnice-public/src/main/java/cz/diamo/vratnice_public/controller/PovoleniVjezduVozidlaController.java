@@ -62,7 +62,9 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     @PostMapping("/povoleni-vjezdu-vozidla/save")
     public ResponseEntity<PovoleniVjezduVozidlaDto> save(@RequestBody @Valid PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto) {
         //PovoleniVjezduVozidla povoleniVjezduVozidla = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
-        return ResponseEntity.ok(povoleniVjezduVozidlaDto);
+        PovoleniVjezduVozidlaDto savePovoleniVjezduVozidlaDto = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
+
+        return ResponseEntity.ok(savePovoleniVjezduVozidlaDto);
     }
 
 }
