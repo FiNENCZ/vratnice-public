@@ -35,7 +35,8 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     public ResponseEntity<Set<PovoleniVjezduVozidlaDto>> povoleniCsv(@RequestPart("file")MultipartFile file) throws IOException, ParseException, BaseException {
         try {
             return ResponseEntity.ok(povoleniVjezduVozidlaService.processPovoleniCsvData(file));
-        } catch (ResponseStatusException re) {
+        } 
+        catch (ResponseStatusException re) {
             logger.error(re);
             throw re;        
         } catch (Exception e) {
@@ -47,15 +48,8 @@ public class PovoleniVjezduVozidlaController extends BaseController{
 
     @PostMapping(value = "/povoleni-vjezdu-vozidla/rz-typ-vozidla-csv", consumes = {"multipart/form-data"})
     public ResponseEntity<RzTypVozidlaDto> rzTypVozidlaCsv(@RequestPart("file")MultipartFile file) throws IOException, ParseException, BaseException {
-        try {
-            return ResponseEntity.ok(povoleniVjezduVozidlaService.processRzTypVozidlaCsvData(file));
-        } catch (ResponseStatusException re) {
-			logger.error(re);
-			throw re;
-		} catch (Exception e) {
-			logger.error(e);
-			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.toString());
-		}
+        return ResponseEntity.ok(povoleniVjezduVozidlaService.processRzTypVozidlaCsvData(file));
+  
        
     }
 

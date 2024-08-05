@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import cz.diamo.vratnice_public.entity.Ridic;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +26,7 @@ public class RidicDto implements Serializable {
     private String prijmeni;
 
     @NotBlank(message = "{ridic.cisloOp.require}")
-    @Size(max = 9, min = 9, message = "{ridic.cisloOp.max.9}")
-    @Pattern(regexp = "\\d+", message = "{ridic.cisloOp.pattern}")
+    @Digits(integer = 10, fraction = 0, message = "{ridic.cisloOp.digits}")
     private String cisloOp;
 
     @Size(max = 120, message = "{ridic.firma.max.120}")

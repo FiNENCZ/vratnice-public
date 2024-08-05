@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RzTypVozidlaCsvRepresentation {
+public class RzTypVozidlaCzechCsvRepresentation {
 
     @CsvBindByName(column = "rzVozidla")
     private String[] rzVozidla;

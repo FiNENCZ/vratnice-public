@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PovoleniVjezduVozidlaCsvRepresentation {
+public class PovoleniVjezduVozidlaCzechCsvRepresentation {
 
     @CsvBindByName(column = "jmenoZadatele")
     private String jmenoZadatele;
