@@ -1,7 +1,5 @@
 package cz.diamo.vratnice_public.enums;
 
-import cz.diamo.vratnice_public.entity.Stat;
-
 public enum StatEnum {
     STAT_CESKA_REPUBLIKA(1), STAT_SLOVENSKO(2), STAT_POLSKO(3), STAT_NEMECKO(4), STAT_RAKOUSKO(5);
 
@@ -15,9 +13,6 @@ public enum StatEnum {
         return value;
     }
 
-    public static StatEnum getStatEnum(Stat stat) {
-        return getStatEnum(stat.getIdStat());
-    }
 
     public static StatEnum getStatEnum(int value) {
         switch (value) {

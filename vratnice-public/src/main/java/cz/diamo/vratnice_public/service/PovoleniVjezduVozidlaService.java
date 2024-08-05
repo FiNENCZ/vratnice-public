@@ -26,6 +26,7 @@ import cz.diamo.vratnice_public.csvRepresentation.PovoleniVjezduVozidlaCzechCsvR
 import cz.diamo.vratnice_public.csvRepresentation.PovoleniVjezduVozidlaEnglishCsvRepresentation;
 import cz.diamo.vratnice_public.csvRepresentation.RzTypVozidlaCzechCsvRepresentation;
 import cz.diamo.vratnice_public.csvRepresentation.RzTypVozidlaEnglishCsvRepresentation;
+import cz.diamo.vratnice_public.dto.LokalitaDto;
 import cz.diamo.vratnice_public.dto.PovoleniVjezduVozidlaDto;
 import cz.diamo.vratnice_public.dto.RidicDto;
 import cz.diamo.vratnice_public.dto.RzTypVozidlaDto;
@@ -141,19 +142,33 @@ public class PovoleniVjezduVozidlaService {
                 povoleniVjezduVozidlaDto.setDatumOd(parseDate(csvLine.getDatumOd()));
                 povoleniVjezduVozidlaDto.setDatumDo(parseDate(csvLine.getDatumDo()));
 
-                List<ZavodDto> listOfExistedZavods = vratniceService.seznamZavodu(null, null);
+                List<ZavodDto> listOfExistedZavod = vratniceService.seznamZavodu(true, null);
+
+                String zavodNazev = csvLine.getZavodNazev();
+                if (zavodNazev != null) {
+                    for (ZavodDto zavodDto: listOfExistedZavod) {
+                        if (zavodDto.getNazev().equals(zavodNazev)) {
+                            povoleniVjezduVozidlaDto.setZavod(zavodDto);
+                            break;
+                        }
+                    }
+                    
+                }
+
+                List<LokalitaDto> listOfExistedLokalit = vratniceService.seznamLokalit(null);
             
-                if (csvLine.getZavod_nazvy() != null && csvLine.getZavod_nazvy().length > 0) {
-                    List<ZavodDto> zavodyList = new ArrayList<>();
-                    for (String zavod : csvLine.getZavod_nazvy()) {
-                        for (ZavodDto zavodDto: listOfExistedZavods) {
-                            if (zavodDto.getNazev() == zavod) {
-                                zavodyList.add(zavodDto);
+                if (csvLine.getLokalitaNazvy() != null && csvLine.getLokalitaNazvy().length > 0) {
+                    List<LokalitaDto> lokalitaList = new ArrayList<>();
+                    for (String lokalitaNazev : csvLine.getLokalitaNazvy()) {
+                        for (LokalitaDto lokalitaDto: listOfExistedLokalit) {
+                            if (lokalitaDto.getNazev().equals(lokalitaNazev)) {
+                                lokalitaList.add(lokalitaDto);
                             }
                         }
                     }
-                    povoleniVjezduVozidlaDto.setZavod(zavodyList);
+                    povoleniVjezduVozidlaDto.setLokality(lokalitaList);
                 }
+
                 povoleniVjezduVozidlaDto.setOpakovanyVjezd(csvLine.isOpakovanyVjezd());
 
                 validate(povoleniVjezduVozidlaDto);
@@ -174,7 +189,7 @@ public class PovoleniVjezduVozidlaService {
             strategy.setType(PovoleniVjezduVozidlaEnglishCsvRepresentation.class);
             CsvToBean<PovoleniVjezduVozidlaEnglishCsvRepresentation> csvToBean = 
                 new CsvToBeanBuilder<PovoleniVjezduVozidlaEnglishCsvRepresentation>(reader)
-                    .withMappingStrategy(strategy).withIgnoreEmptyLine(true).withIgnoreLeadingWhiteSpace(true).build();
+                    .withMappingStrategy(strategy).withIgnoreEmptyLine(true).build();
 
             for (PovoleniVjezduVozidlaEnglishCsvRepresentation csvLine : csvToBean.parse()) {
                 PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto = new PovoleniVjezduVozidlaDto();
@@ -220,19 +235,33 @@ public class PovoleniVjezduVozidlaService {
                 povoleniVjezduVozidlaDto.setDatumOd(parseDate(csvLine.getDatumOd()));
                 povoleniVjezduVozidlaDto.setDatumDo(parseDate(csvLine.getDatumDo()));
 
-                List<ZavodDto> listOfExistedZavods = vratniceService.seznamZavodu(null, null);
+                List<ZavodDto> listOfExistedZavod = vratniceService.seznamZavodu(true, null);
+
+                String zavodNazev = csvLine.getZavodNazev();
+                if (zavodNazev != null) {
+                    for (ZavodDto zavodDto: listOfExistedZavod) {
+                        if (zavodDto.getNazev().equals(zavodNazev)) {
+                            povoleniVjezduVozidlaDto.setZavod(zavodDto);
+                            break;
+                        }
+                    }
+                    
+                }
+
+                List<LokalitaDto> listOfExistedLokalit = vratniceService.seznamLokalit(null);
             
-                if (csvLine.getZavod_nazvy() != null && csvLine.getZavod_nazvy().length > 0) {
-                    List<ZavodDto> zavodyList = new ArrayList<>();
-                    for (String zavod : csvLine.getZavod_nazvy()) {
-                        for (ZavodDto zavodDto: listOfExistedZavods) {
-                            if (zavodDto.getNazev() == zavod) {
-                                zavodyList.add(zavodDto);
+                if (csvLine.getLokalitaNazvy() != null && csvLine.getLokalitaNazvy().length > 0) {
+                    List<LokalitaDto> lokalitaList = new ArrayList<>();
+                    for (String lokalitaNazev : csvLine.getLokalitaNazvy()) {
+                        for (LokalitaDto lokalitaDto: listOfExistedLokalit) {
+                            if (lokalitaDto.getNazev().equals(lokalitaNazev)) {
+                                lokalitaList.add(lokalitaDto);
                             }
                         }
                     }
-                    povoleniVjezduVozidlaDto.setZavod(zavodyList);
+                    povoleniVjezduVozidlaDto.setLokality(lokalitaList);
                 }
+
                 povoleniVjezduVozidlaDto.setOpakovanyVjezd(csvLine.isOpakovanyVjezd());
 
                 validate(povoleniVjezduVozidlaDto);

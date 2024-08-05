@@ -1,8 +1,5 @@
 package cz.diamo.vratnice_public.dto;
 
-import cz.diamo.vratnice_public.entity.Zavod;
-import cz.diamo.vratnice_public.entity.PovoleniVjezduVozidla;
-import cz.diamo.vratnice_public.entity.VozidloTyp;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
@@ -13,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -65,104 +61,15 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
     private Date datumDo;
 
     @NotNull(message = "{povoleni.vjezdu.vozidla.zavod.require}")
-    private List<ZavodDto> zavod;
+    private ZavodDto zavod;
+
+    @NotNull(message = "{povoleni.vjezdu.vozidla.lokalita.require}")
+    @NotEmpty(message = "{povoleni.vjezdu.vozidla.lokalita.require}")
+    private List<LokalitaDto> lokality;
 
     private Boolean opakovanyVjezd = false;
 
     private String stav = "vyžádáno";
-
-    public PovoleniVjezduVozidlaDto(PovoleniVjezduVozidla povoleniVjezduVozidla) {
-        if (povoleniVjezduVozidla == null) {
-            return;
-        }
-
-        this.idPovoleniVjezduVozidla = povoleniVjezduVozidla.getIdPovoleniVjezduVozidla();
-        this.jmenoZadatele = povoleniVjezduVozidla.getJmenoZadatele();
-        this.prijmeniZadatele = povoleniVjezduVozidla.getPrijmeniZadatele();
-        this.spolecnostZadatele = povoleniVjezduVozidla.getSpolecnostZadatele();
-        this.icoZadatele = povoleniVjezduVozidla.getIcoZadatele();
-        this.duvodZadosti = povoleniVjezduVozidla.getDuvodZadosti();
-
-        List<String> rzVozidla = new ArrayList<>();
-        if (povoleniVjezduVozidla.getRzVozidla() != null) {
-            for (String rzVozidlo : povoleniVjezduVozidla.getRzVozidla()) {
-                rzVozidla.add(new String(rzVozidlo));
-            }
-        }
-        this.setRzVozidla(rzVozidla);
-
-        List<VozidloTypDto> vozidloTypDtos = new ArrayList<>();
-        if (povoleniVjezduVozidla.getTypVozidla() != null) {
-            for(VozidloTyp vozidloTyp : povoleniVjezduVozidla.getTypVozidla()){
-                vozidloTypDtos.add(new VozidloTypDto(vozidloTyp));
-            }
-        }
-        this.setTypVozidla(vozidloTypDtos);
-     
-        this.zemeRegistraceVozidla = new StatDto(povoleniVjezduVozidla.getZemeRegistraceVozidla());
-        this.ridic = new RidicDto(povoleniVjezduVozidla.getRidic());
-        this.spolecnostVozidla = povoleniVjezduVozidla.getSpolecnostVozidla();
-        this.datumOd = povoleniVjezduVozidla.getDatumOd();
-        this.datumDo = povoleniVjezduVozidla.getDatumDo();
-
-        List<ZavodDto> zavodDtos = new ArrayList<>();
-        if (povoleniVjezduVozidla.getZavod() != null) {
-            for (Zavod zavod : povoleniVjezduVozidla.getZavod()) {
-                zavodDtos.add(new ZavodDto(zavod));
-            }
-        }
-        this.setZavod(zavodDtos);
-
-        this.opakovanyVjezd = povoleniVjezduVozidla.getOpakovanyVjezd();
-        this.stav = povoleniVjezduVozidla.getStav();
-    }
-
-    public PovoleniVjezduVozidla toEntity() {
-        PovoleniVjezduVozidla povoleniVjezduVozidla = new PovoleniVjezduVozidla();
-    
-        povoleniVjezduVozidla.setIdPovoleniVjezduVozidla(this.idPovoleniVjezduVozidla);
-        povoleniVjezduVozidla.setJmenoZadatele(this.jmenoZadatele);
-        povoleniVjezduVozidla.setPrijmeniZadatele(this.prijmeniZadatele);
-        povoleniVjezduVozidla.setSpolecnostZadatele(this.spolecnostZadatele);
-        povoleniVjezduVozidla.setIcoZadatele(this.icoZadatele);
-        povoleniVjezduVozidla.setDuvodZadosti(this.duvodZadosti);
-    
-        List<String> rzVozidla = new ArrayList<>();
-        if (this.getRzVozidla() != null) {
-            for (String rzVozidlo : this.getRzVozidla()) {
-                rzVozidla.add(new String(rzVozidlo));
-            }
-        }
-        povoleniVjezduVozidla.setRzVozidla(rzVozidla);
-
-        List<VozidloTyp> vozidlaTypy = new ArrayList<>();
-        if (getTypVozidla() != null) {
-            for (VozidloTypDto vozidloTypDto : this.getTypVozidla()) {
-                vozidlaTypy.add(new VozidloTyp(vozidloTypDto.getTypEnum()));
-            }
-        }
-        povoleniVjezduVozidla.setTypVozidla(vozidlaTypy);
-    
-
-        povoleniVjezduVozidla.setZemeRegistraceVozidla(getZemeRegistraceVozidla().toEntity());
-        povoleniVjezduVozidla.setRidic(this.ridic != null ? this.ridic.toEntity() : null); // Pokud je ridic null, nastavíme null
-        povoleniVjezduVozidla.setSpolecnostVozidla(this.spolecnostVozidla);
-        povoleniVjezduVozidla.setDatumOd(this.datumOd);
-        povoleniVjezduVozidla.setDatumDo(this.datumDo);
-    
-        List<Zavod> zavody = new ArrayList<>();
-        if (getZavod() != null) {
-            for (ZavodDto zavodDto : this.getZavod()) {
-                zavody.add(new Zavod(zavodDto.getId()));
-            }
-        }
-        povoleniVjezduVozidla.setZavod(zavody);
-    
-        povoleniVjezduVozidla.setOpakovanyVjezd(this.opakovanyVjezd);
-        povoleniVjezduVozidla.setStav(this.stav);
-    
-        return povoleniVjezduVozidla;
-    }
 
     @AssertTrue(message = "{povoleni.vjezdu.vozidla.rz_typ_vozidla.require}")
     private boolean isRzVozidlaTypVozidlaCountEqual() {
@@ -188,4 +95,32 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
         Set<String> uniqueRzVozidla = new HashSet<>(rzVozidla);
         return uniqueRzVozidla.size() == rzVozidla.size();
     }
+
+    @AssertTrue(message = "{povoleni.vjezdu.vozidla.rz_vozidla.require}")
+    private boolean isRzVozidlaElementCompleted() {
+        if (rzVozidla == null) { 
+            return true; // null není validace anotace, použití @NotNull to vyřeší
+        }
+
+        for (String element : rzVozidla) {
+            if (element == null || element.trim().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @AssertTrue(message = "{povoleni.vjezdu.vozidla.lokalita.invalid}")
+    private boolean isLokalityHaveSameZavod() {
+        if (lokality == null || zavod == null) {
+            return true; // null není validace anotace, použití @NotNull to vyřeší
+        }
+        for (LokalitaDto lokalita : lokality) {
+            if (!zavod.getId().equals(lokalita.getZavod().getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

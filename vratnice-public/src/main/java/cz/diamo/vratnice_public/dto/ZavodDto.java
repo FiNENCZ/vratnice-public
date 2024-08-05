@@ -2,9 +2,6 @@ package cz.diamo.vratnice_public.dto;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import cz.diamo.vratnice_public.entity.Zavod;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,32 +29,4 @@ public class ZavodDto implements Serializable {
 
     @NotNull(message = "{aktivita.require}")
     private Boolean aktivita;
-
-    public ZavodDto(Zavod zavod) {
-        if (zavod == null)
-            return;
-        setId(zavod.getIdZavod());
-        setSapId(zavod.getSapId());
-        setNazev(zavod.getNazev());
-        setBarvaPisma(zavod.getBarvaPisma());
-        setBarvaPozadi(zavod.getBarvaPozadi());
-        setAktivita(zavod.getAktivita());
-    }
-
-    @JsonIgnore
-    public Zavod getZavod(Zavod zavod, boolean pouzeId) {
-        if (zavod == null)
-            zavod = new Zavod();
-
-        zavod.setIdZavod(getId());
-        if (!pouzeId) {
-            zavod.setSapId(getSapId());
-            zavod.setNazev(getNazev());
-            zavod.setBarvaPisma(getBarvaPisma());
-            zavod.setBarvaPozadi(getBarvaPozadi());
-            zavod.setAktivita(getAktivita());
-        }
-        return zavod;
-
-    }
 }

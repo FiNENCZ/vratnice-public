@@ -1,6 +1,5 @@
 package cz.diamo.vratnice_public.enums;
 
-import cz.diamo.vratnice_public.entity.VozidloTyp;
 
 public enum VozidloTypEnum {
     VOZIDLO_OSOBNI(1), VOZIDLO_DODAVKA(2), VOZIDLO_NAKLADNI(3), VOZIDLO_SPECIALNI(4), VOZIDLO_IZS(5);
@@ -13,10 +12,6 @@ public enum VozidloTypEnum {
 
     public Integer getValue() {
         return value;
-    }
-
-    public static VozidloTypEnum getVozidloTypEnum(VozidloTyp vozidloTyp) {
-        return getVozidloTypEnum(vozidloTyp.getIdVozidloTyp());
     }
 
     public static VozidloTypEnum getVozidloTypEnum(int value) {

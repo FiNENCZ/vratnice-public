@@ -1,6 +1,7 @@
 package cz.diamo.vratnice_public.csvRepresentation;
 
 import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvCustomBindByName;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,8 +55,11 @@ public class PovoleniVjezduVozidlaEnglishCsvRepresentation {
     @CsvBindByName(column = "endDate")
     private String datumDo;
 
-    @CsvBindByName(column = "siteNames")
-    private String[] zavod_nazvy;
+    @CsvBindByName(column = "plantName")
+    private String zavodNazev;
+
+    @CsvCustomBindByName(converter = LokalitaSplitConverter.class, column = "locationNames")
+    private String[] lokalitaNazvy;
 
     @CsvBindByName(column = "repeatedEntry")
     private boolean opakovanyVjezd;

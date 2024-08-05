@@ -2,8 +2,6 @@ package cz.diamo.vratnice_public.dto;
 
 import java.io.Serializable;
 
-import cz.diamo.vratnice_public.entity.Zavod;
-import cz.diamo.vratnice_public.entity.Lokalita;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -23,26 +21,4 @@ public class LokalitaDto implements Serializable {
 
     @NotNull(message = "{lokalita.zavod.require}")
     private ZavodDto zavod;
-    
-
-    public LokalitaDto(Lokalita lokalita) {
-        if (lokalita == null) {
-            return;
-        }
-
-        this.id = lokalita.getIdLokalita();
-        this.nazev = lokalita.getNazev();
-        this.zavod = new ZavodDto(lokalita.getZavod());
-    }
-
-    public Lokalita toEntity() {
-        Lokalita lokalita = new Lokalita();
-
-        lokalita.setIdLokalita(this.id);
-        lokalita.setNazev(this.nazev);
-        lokalita.setZavod(new Zavod(getZavod().getId()));
-
-        return lokalita;
-    }
-
 }

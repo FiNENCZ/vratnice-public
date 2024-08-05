@@ -3,7 +3,6 @@ package cz.diamo.vratnice_public.dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import cz.diamo.vratnice_public.entity.Ridic;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -34,30 +33,4 @@ public class RidicDto implements Serializable {
 
     private Date datumPouceni;
 
-
-    public RidicDto(Ridic ridic) {
-        if (ridic == null) {
-            return;
-        }
-
-        this.idRidic = ridic.getIdRidic();
-        this.jmeno = ridic.getJmeno();
-        this.prijmeni = ridic.getPrijmeni();
-        this.cisloOp = ridic.getCisloOp();
-        this.firma = ridic.getFirma();
-        this.datumPouceni = ridic.getDatumPouceni();
-    }
-
-    public Ridic toEntity() {
-        Ridic ridic = new Ridic();
-        
-        ridic.setIdRidic(this.idRidic);
-        ridic.setJmeno(this.jmeno);
-        ridic.setPrijmeni(this.prijmeni);
-        ridic.setCisloOp(this.cisloOp);
-        ridic.setFirma(this.firma);
-        ridic.setDatumPouceni(this.datumPouceni);
-
-        return ridic;
-    }
 }
