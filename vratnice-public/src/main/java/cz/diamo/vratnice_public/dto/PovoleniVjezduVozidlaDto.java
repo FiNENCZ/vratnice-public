@@ -2,6 +2,7 @@ package cz.diamo.vratnice_public.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -30,11 +31,14 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
     @Size(max = 30, message = "{povoleni.vjezdu.vozidla.prijmeni_zadatele.max.30}")
     private String prijmeniZadatele;
 
-    @NotBlank(message = "{povoleni.vjezdu.vozidla.spolecnost_zadatele.require}")
-    @Size(max = 120, message = "{povoleni.vjezdu.vozidla.spolecnost_zadatele.max.120}")
-    private String spolecnostZadatele;
+    @Valid
+    private SpolecnostDto spolecnostZadatele;
 
     private String icoZadatele;
+
+    @Email(message = "{povoleni.vjezdu.vozidla.email.invalid}")
+    @NotBlank(message = "{povoleni.vjezdu.vozidla.email.require}")
+    private String emailZadatele;
 
     private String duvodZadosti;
 
@@ -52,7 +56,8 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
     @Valid
     private RidicDto ridic;
 
-    private String spolecnostVozidla;
+    @Valid
+    private SpolecnostDto spolecnostVozidla;
 
     @NotNull(message = "{povoleni.vjezdu.vozidla.datum_od.require}")
     private Date datumOd;

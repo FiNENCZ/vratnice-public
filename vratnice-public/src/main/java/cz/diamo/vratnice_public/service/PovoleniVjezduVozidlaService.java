@@ -30,6 +30,7 @@ import cz.diamo.vratnice_public.dto.LokalitaDto;
 import cz.diamo.vratnice_public.dto.PovoleniVjezduVozidlaDto;
 import cz.diamo.vratnice_public.dto.RidicDto;
 import cz.diamo.vratnice_public.dto.RzTypVozidlaDto;
+import cz.diamo.vratnice_public.dto.SpolecnostDto;
 import cz.diamo.vratnice_public.dto.VozidloTypDto;
 import cz.diamo.vratnice_public.dto.ZavodDto;
 import cz.diamo.vratnice_public.exception.BaseException;
@@ -56,6 +57,12 @@ public class PovoleniVjezduVozidlaService {
             RidicDto savedRidic =  vratniceService.saveRidic(povoleniVjezduVozidlaDto.getRidic());
             povoleniVjezduVozidlaDto.setRidic(savedRidic);
         }
+
+        SpolecnostDto savedSpolecnostZadatele = vratniceService.saveSpolecnost(povoleniVjezduVozidlaDto.getSpolecnostZadatele());
+        SpolecnostDto savedSpolecnostVozidla = vratniceService.saveSpolecnost(povoleniVjezduVozidlaDto.getSpolecnostVozidla());
+
+        povoleniVjezduVozidlaDto.setSpolecnostZadatele(savedSpolecnostZadatele);
+        povoleniVjezduVozidlaDto.setSpolecnostVozidla(savedSpolecnostVozidla);
 
         //TODO: zaslání na žádosti
 
@@ -104,7 +111,7 @@ public class PovoleniVjezduVozidlaService {
                 // Basic fields
                 povoleniVjezduVozidlaDto.setJmenoZadatele(csvLine.getJmenoZadatele());
                 povoleniVjezduVozidlaDto.setPrijmeniZadatele(csvLine.getPrijmeniZadatele());
-                povoleniVjezduVozidlaDto.setSpolecnostZadatele(csvLine.getSpolecnostZadatele());
+                povoleniVjezduVozidlaDto.setSpolecnostZadatele(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostZadatele())));
                 povoleniVjezduVozidlaDto.setIcoZadatele(csvLine.getIcoZadatele());
                 povoleniVjezduVozidlaDto.setDuvodZadosti(csvLine.getDuvodZadosti());
                 povoleniVjezduVozidlaDto.setZemeRegistraceVozidla(vratniceService.getStatByNazev(csvLine.getZemeRegistraceVozidla()));
@@ -130,7 +137,7 @@ public class PovoleniVjezduVozidlaService {
                         ridicDto.setJmeno(csvLine.getRidic_jmeno());
                         ridicDto.setPrijmeni(csvLine.getRidic_prijmeni());
                         ridicDto.setCisloOp(csvLine.getRidic_cisloOp());
-                        ridicDto.setFirma(csvLine.getRidic_firma());
+                        ridicDto.setSpolecnost(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getRidic_firma())));
                     } else {
                         ridicDto = existedRidic;
                     }
@@ -138,7 +145,7 @@ public class PovoleniVjezduVozidlaService {
                     povoleniVjezduVozidlaDto.setRidic(ridicDto);
                 }
 
-                povoleniVjezduVozidlaDto.setSpolecnostVozidla(csvLine.getSpolecnostVozidla());
+                povoleniVjezduVozidlaDto.setSpolecnostVozidla(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostVozidla())));
                 povoleniVjezduVozidlaDto.setDatumOd(parseDate(csvLine.getDatumOd()));
                 povoleniVjezduVozidlaDto.setDatumDo(parseDate(csvLine.getDatumDo()));
 
@@ -197,7 +204,7 @@ public class PovoleniVjezduVozidlaService {
                 // Basic fields
                 povoleniVjezduVozidlaDto.setJmenoZadatele(csvLine.getJmenoZadatele());
                 povoleniVjezduVozidlaDto.setPrijmeniZadatele(csvLine.getPrijmeniZadatele());
-                povoleniVjezduVozidlaDto.setSpolecnostZadatele(csvLine.getSpolecnostZadatele());
+                povoleniVjezduVozidlaDto.setSpolecnostZadatele(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostZadatele())));
                 povoleniVjezduVozidlaDto.setIcoZadatele(csvLine.getIcoZadatele());
                 povoleniVjezduVozidlaDto.setDuvodZadosti(csvLine.getDuvodZadosti());
                 povoleniVjezduVozidlaDto.setZemeRegistraceVozidla(vratniceService.getStatByNazev(csvLine.getZemeRegistraceVozidla()));
@@ -223,7 +230,7 @@ public class PovoleniVjezduVozidlaService {
                         ridicDto.setJmeno(csvLine.getRidic_jmeno());
                         ridicDto.setPrijmeni(csvLine.getRidic_prijmeni());
                         ridicDto.setCisloOp(csvLine.getRidic_cisloOp());
-                        ridicDto.setFirma(csvLine.getRidic_firma());
+                        ridicDto.setSpolecnost(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getRidic_firma())));
                     } else {
                         ridicDto = existedRidic;
                     }
@@ -231,7 +238,7 @@ public class PovoleniVjezduVozidlaService {
                     povoleniVjezduVozidlaDto.setRidic(ridicDto);
                 }
 
-                povoleniVjezduVozidlaDto.setSpolecnostVozidla(csvLine.getSpolecnostVozidla());
+                povoleniVjezduVozidlaDto.setSpolecnostVozidla(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostVozidla())));
                 povoleniVjezduVozidlaDto.setDatumOd(parseDate(csvLine.getDatumOd()));
                 povoleniVjezduVozidlaDto.setDatumDo(parseDate(csvLine.getDatumDo()));
 

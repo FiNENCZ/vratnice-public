@@ -3,6 +3,7 @@ package cz.diamo.vratnice_public.dto;
 import java.io.Serializable;
 import java.util.Date;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -25,11 +26,11 @@ public class RidicDto implements Serializable {
     private String prijmeni;
 
     @NotBlank(message = "{ridic.cisloOp.require}")
-    @Digits(integer = 10, fraction = 0, message = "{ridic.cisloOp.digits}")
+    @Digits(integer = 9, fraction = 0, message = "{ridic.cisloOp.digits}")
     private String cisloOp;
 
-    @Size(max = 120, message = "{ridic.firma.max.120}")
-    private String firma;
+    @Valid
+    private SpolecnostDto spolecnost;
 
     private Date datumPouceni;
 
