@@ -22,6 +22,9 @@ public class PovoleniVjezduVozidlaCzechCsvRepresentation {
     @CsvBindByName(column = "icoZadatele")
     private String icoZadatele;
 
+    @CsvBindByName(column = "emailZadatele")
+    private String emailZadatele;
+
     @CsvBindByName(column = "duvodZadosti")
     private String duvodZadosti;
 

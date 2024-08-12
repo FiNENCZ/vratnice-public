@@ -113,6 +113,7 @@ public class PovoleniVjezduVozidlaService {
                 povoleniVjezduVozidlaDto.setPrijmeniZadatele(csvLine.getPrijmeniZadatele());
                 povoleniVjezduVozidlaDto.setSpolecnostZadatele(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostZadatele())));
                 povoleniVjezduVozidlaDto.setIcoZadatele(csvLine.getIcoZadatele());
+                povoleniVjezduVozidlaDto.setEmailZadatele(csvLine.getEmailZadatele());
                 povoleniVjezduVozidlaDto.setDuvodZadosti(csvLine.getDuvodZadosti());
                 povoleniVjezduVozidlaDto.setZemeRegistraceVozidla(vratniceService.getStatByNazev(csvLine.getZemeRegistraceVozidla()));
 
@@ -206,6 +207,7 @@ public class PovoleniVjezduVozidlaService {
                 povoleniVjezduVozidlaDto.setPrijmeniZadatele(csvLine.getPrijmeniZadatele());
                 povoleniVjezduVozidlaDto.setSpolecnostZadatele(vratniceService.saveSpolecnost(new SpolecnostDto(csvLine.getSpolecnostZadatele())));
                 povoleniVjezduVozidlaDto.setIcoZadatele(csvLine.getIcoZadatele());
+                povoleniVjezduVozidlaDto.setEmailZadatele(csvLine.getEmailZadatele());
                 povoleniVjezduVozidlaDto.setDuvodZadosti(csvLine.getDuvodZadosti());
                 povoleniVjezduVozidlaDto.setZemeRegistraceVozidla(vratniceService.getStatByNazev(csvLine.getZemeRegistraceVozidla()));
 

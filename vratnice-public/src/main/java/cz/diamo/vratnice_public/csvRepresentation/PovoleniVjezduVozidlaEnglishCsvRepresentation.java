@@ -22,6 +22,9 @@ public class PovoleniVjezduVozidlaEnglishCsvRepresentation {
     @CsvBindByName(column = "applicantICO")
     private String icoZadatele;
 
+    @CsvBindByName(column = "applicantEmail")
+    private String emailZadatele;
+
     @CsvBindByName(column = "requestReason")
     private String duvodZadosti;
 
