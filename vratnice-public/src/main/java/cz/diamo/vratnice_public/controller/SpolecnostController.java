@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.SpolecnostDto;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 
@@ -23,7 +26,8 @@ public class SpolecnostController  extends BaseController  {
     private VratniceService vratniceService;
 
     @GetMapping("spolecnost/list")
-    public ResponseEntity<List<SpolecnostDto>> list() {
+    @ValidReCaptcha
+    public ResponseEntity<List<SpolecnostDto>> list(@RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
         return ResponseEntity.ok(vratniceService.seznamSpolecnosti());
     }
 }

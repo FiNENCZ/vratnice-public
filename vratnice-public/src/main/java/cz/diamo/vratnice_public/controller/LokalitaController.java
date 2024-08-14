@@ -9,9 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestController;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.LokalitaDto;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -23,7 +26,8 @@ public class LokalitaController extends BaseController  {
     private VratniceService vratniceService;
 
     @GetMapping("/lokalita/list")
-    public ResponseEntity<List<LokalitaDto>> list(@RequestParam @Nullable String idZavod) {
+    @ValidReCaptcha
+    public ResponseEntity<List<LokalitaDto>> list(@RequestParam @Nullable String idZavod, @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
         return ResponseEntity.ok(vratniceService.seznamLokalit(idZavod));
     }
     

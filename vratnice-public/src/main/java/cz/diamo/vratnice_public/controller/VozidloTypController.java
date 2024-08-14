@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.VozidloTypDto;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -24,7 +27,9 @@ public class VozidloTypController extends BaseController {
     private VratniceService vratniceService;
 
     @GetMapping("/vozidlo-typ/list")
-    public ResponseEntity<List<VozidloTypDto>> list(HttpServletRequest request, @RequestParam @Nullable Boolean withIZS ) {
+    @ValidReCaptcha
+    public ResponseEntity<List<VozidloTypDto>> list(HttpServletRequest request, @RequestHeader("reCAPTCHA-Token") String recaptchaToken,
+            @RequestParam @Nullable Boolean withIZS ) throws ReCaptchaException {
         return ResponseEntity.ok(vratniceService.seznamVozidloTyp(withIZS));
     }
 }

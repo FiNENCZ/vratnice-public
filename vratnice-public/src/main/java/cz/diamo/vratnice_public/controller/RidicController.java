@@ -5,10 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.RidicDto;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 
 @RestController
@@ -24,7 +27,8 @@ public class RidicController extends BaseController  {
     }*/
 
     @GetMapping("/ridic/list-by-cislo-op")
-    public ResponseEntity<RidicDto> getRidicByCisloOp(@RequestParam String cisloOp) {
+    @ValidReCaptcha
+    public ResponseEntity<RidicDto> getRidicByCisloOp(@RequestParam String cisloOp, @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
         RidicDto ridic = vratniceService.getRidicByCisloOp(cisloOp);
         if (ridic == null) {
             return ResponseEntity.notFound().build();

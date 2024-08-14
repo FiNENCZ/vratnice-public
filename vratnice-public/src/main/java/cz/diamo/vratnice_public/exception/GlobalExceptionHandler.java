@@ -11,6 +11,21 @@ import java.time.LocalDateTime;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @ExceptionHandler(ReCaptchaException.class)
+    public ResponseEntity<ErrorResponse> handleReCaptchaException(ReCaptchaException ex, WebRequest request) {
+        String path = request.getDescription(false).replace("uri=", "");
+
+        ErrorResponse errorResponse = new ErrorResponse(
+            LocalDateTime.now(),
+            ex.getHttpStatus().value(), // Použijte status kód definovaný ve výjimce
+            "Forbidden",
+            ex.getMessage(),
+            path
+        );
+        return new ResponseEntity<>(errorResponse, ex.getHttpStatus());
+    }
+    
+
     @ExceptionHandler(BaseException.class)
     public ResponseEntity<ErrorResponse> handleBaseException(BaseException ex, WebRequest request) {
         String path = request.getDescription(false).replace("uri=", "");

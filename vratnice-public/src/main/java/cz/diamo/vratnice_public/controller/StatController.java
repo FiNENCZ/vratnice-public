@@ -7,9 +7,12 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.StatDto;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -21,7 +24,8 @@ public class StatController extends BaseController {
     private VratniceService vratniceService;
 
     @GetMapping("/stat/list")
-    public ResponseEntity<List<StatDto>> list(HttpServletRequest request) {
+    @ValidReCaptcha
+    public ResponseEntity<List<StatDto>> list(HttpServletRequest request, @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
         return ResponseEntity.ok(vratniceService.seznamStatu());
     }
 

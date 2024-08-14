@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cz.diamo.vratnice_public.dto.ReCaptchaResponse;
-import cz.diamo.vratnice_public.exception.BaseException;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.ReCaptchaService;
 
 @Aspect
@@ -24,10 +24,10 @@ public class ReCaptchaAspect {
     public void validReCaptcha() {}
 
     @Before("validReCaptcha() && args(entity, recaptchaToken, ..)")
-    public void validateReCaptcha(JoinPoint joinPoint, Object entity, String recaptchaToken) throws BaseException {
+    public void validateReCaptcha(JoinPoint joinPoint, Object entity, String recaptchaToken) throws ReCaptchaException {
         ReCaptchaResponse reCaptchaResponse = recaptchaService.verify(recaptchaToken);
         if (!reCaptchaResponse.isSuccess()) {
-            throw new BaseException(reCaptchaResponse.getErrorMessage());
+            throw new ReCaptchaException(reCaptchaResponse.getErrorMessage());
         }
     }
 }

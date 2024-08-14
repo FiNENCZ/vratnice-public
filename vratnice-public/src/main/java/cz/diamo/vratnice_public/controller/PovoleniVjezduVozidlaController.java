@@ -21,6 +21,7 @@ import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.PovoleniVjezduVozidlaDto;
 import cz.diamo.vratnice_public.dto.RzTypVozidlaDto;
 import cz.diamo.vratnice_public.exception.BaseException;
+import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.PovoleniVjezduVozidlaService;
 import jakarta.validation.Valid;
 
@@ -36,7 +37,7 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     @PostMapping(value = "/povoleni-vjezdu-vozidla/povoleni-csv", consumes = {"multipart/form-data"})
     @ValidReCaptcha
     public ResponseEntity<Set<PovoleniVjezduVozidlaDto>> povoleniCsv(@RequestPart("file")MultipartFile file, 
-                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException {
+                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException, ReCaptchaException{
         try {
             return ResponseEntity.ok(povoleniVjezduVozidlaService.processPovoleniCsvData(file));
         } 
@@ -53,7 +54,7 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     @PostMapping(value = "/povoleni-vjezdu-vozidla/rz-typ-vozidla-csv", consumes = {"multipart/form-data"})
     @ValidReCaptcha
     public ResponseEntity<RzTypVozidlaDto> rzTypVozidlaCsv(@RequestPart("file")MultipartFile file,
-             @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException {
+             @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException, ReCaptchaException {
         return ResponseEntity.ok(povoleniVjezduVozidlaService.processRzTypVozidlaCsvData(file));
   
        
@@ -62,7 +63,7 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     @PostMapping("/povoleni-vjezdu-vozidla/save")
     @ValidReCaptcha
     public ResponseEntity<PovoleniVjezduVozidlaDto> save(@RequestBody @Valid PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto, 
-                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) {
+                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
         //PovoleniVjezduVozidla povoleniVjezduVozidla = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
         PovoleniVjezduVozidlaDto savePovoleniVjezduVozidlaDto = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
 
