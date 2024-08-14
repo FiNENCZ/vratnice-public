@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
 @Configuration
@@ -13,6 +14,12 @@ public class RestTemplateVratnicePublicConfiguration {
     @Bean
     RestOperations restVratnice(RestTemplateBuilder restTemplateBuilder, AppProperties appProperties) {
         return restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(appProperties.getVratniceApiUrl()))
+                .messageConverters(new MappingJackson2HttpMessageConverter()).build();
+    }
+
+    @Bean
+    RestTemplate restReCaptcha(RestTemplateBuilder restTemplateBuilder, ReCaptchaProperties reCaptchaProperties) {
+        return restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(reCaptchaProperties.getSite()))
                 .messageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
 

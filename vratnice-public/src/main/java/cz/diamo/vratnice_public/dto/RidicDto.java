@@ -26,7 +26,7 @@ public class RidicDto implements Serializable {
     private String prijmeni;
 
     @NotBlank(message = "{ridic.cisloOp.require}")
-    @Digits(integer = 9, fraction = 0, message = "{ridic.cisloOp.digits}")
+    @Digits(integer = 9, fraction = 0, message = "{ridic.cisloOp.pattern}")
     private String cisloOp;
 
     @Valid

@@ -11,11 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.PovoleniVjezduVozidlaDto;
 import cz.diamo.vratnice_public.dto.RzTypVozidlaDto;
 import cz.diamo.vratnice_public.exception.BaseException;
@@ -32,7 +34,9 @@ public class PovoleniVjezduVozidlaController extends BaseController{
     private PovoleniVjezduVozidlaService povoleniVjezduVozidlaService;
 
     @PostMapping(value = "/povoleni-vjezdu-vozidla/povoleni-csv", consumes = {"multipart/form-data"})
-    public ResponseEntity<Set<PovoleniVjezduVozidlaDto>> povoleniCsv(@RequestPart("file")MultipartFile file) throws IOException, ParseException, BaseException {
+    @ValidReCaptcha
+    public ResponseEntity<Set<PovoleniVjezduVozidlaDto>> povoleniCsv(@RequestPart("file")MultipartFile file, 
+                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException {
         try {
             return ResponseEntity.ok(povoleniVjezduVozidlaService.processPovoleniCsvData(file));
         } 
@@ -47,14 +51,18 @@ public class PovoleniVjezduVozidlaController extends BaseController{
 
 
     @PostMapping(value = "/povoleni-vjezdu-vozidla/rz-typ-vozidla-csv", consumes = {"multipart/form-data"})
-    public ResponseEntity<RzTypVozidlaDto> rzTypVozidlaCsv(@RequestPart("file")MultipartFile file) throws IOException, ParseException, BaseException {
+    @ValidReCaptcha
+    public ResponseEntity<RzTypVozidlaDto> rzTypVozidlaCsv(@RequestPart("file")MultipartFile file,
+             @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws IOException, ParseException, BaseException {
         return ResponseEntity.ok(povoleniVjezduVozidlaService.processRzTypVozidlaCsvData(file));
   
        
     }
 
     @PostMapping("/povoleni-vjezdu-vozidla/save")
-    public ResponseEntity<PovoleniVjezduVozidlaDto> save(@RequestBody @Valid PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto) {
+    @ValidReCaptcha
+    public ResponseEntity<PovoleniVjezduVozidlaDto> save(@RequestBody @Valid PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto, 
+                @RequestHeader("reCAPTCHA-Token") String recaptchaToken) {
         //PovoleniVjezduVozidla povoleniVjezduVozidla = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
         PovoleniVjezduVozidlaDto savePovoleniVjezduVozidlaDto = povoleniVjezduVozidlaService.create(povoleniVjezduVozidlaDto);
 
