@@ -18,9 +18,14 @@ public class RestTemplateVratnicePublicConfiguration {
     }
 
     @Bean
+    RestOperations restZadosti(RestTemplateBuilder restTemplateBuilder, AppProperties appProperties) {
+        return restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(appProperties.getZadostiApiUrl()))
+                .messageConverters(new MappingJackson2HttpMessageConverter()).build();
+    }
+
+    @Bean
     RestTemplate restReCaptcha(RestTemplateBuilder restTemplateBuilder, ReCaptchaProperties reCaptchaProperties) {
         return restTemplateBuilder.uriTemplateHandler(new DefaultUriBuilderFactory(reCaptchaProperties.getSite()))
                 .messageConverters(new MappingJackson2HttpMessageConverter()).build();
     }
-
 }
