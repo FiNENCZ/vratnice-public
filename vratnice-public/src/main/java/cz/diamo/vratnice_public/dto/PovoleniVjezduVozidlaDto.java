@@ -16,6 +16,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import cz.diamo.vratnice_public.enums.ZadostStavEnum;
+
 @Data
 @NoArgsConstructor
 public class PovoleniVjezduVozidlaDto implements Serializable {
@@ -74,7 +76,7 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
 
     private Boolean opakovanyVjezd = false;
 
-    private String stav = "vyžádáno";
+    private ZadostStavDto stav = new ZadostStavDto(ZadostStavEnum.PRIPRAVENO.getValue());
 
     @AssertTrue(message = "{povoleni.vjezdu.vozidla.rz_typ_vozidla.require}")
     private boolean isRzVozidlaTypVozidlaCountEqual() {

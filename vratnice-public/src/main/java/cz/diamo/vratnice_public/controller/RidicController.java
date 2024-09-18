@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cz.diamo.vratnice_public.annotation.ValidReCaptcha;
 import cz.diamo.vratnice_public.dto.RidicDto;
+import cz.diamo.vratnice_public.exception.BaseException;
 import cz.diamo.vratnice_public.exception.ReCaptchaException;
 import cz.diamo.vratnice_public.service.VratniceService;
 
@@ -28,7 +29,7 @@ public class RidicController extends BaseController  {
 
     @GetMapping("/ridic/list-by-cislo-op")
     @ValidReCaptcha
-    public ResponseEntity<RidicDto> getRidicByCisloOp(@RequestParam String cisloOp, @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException {
+    public ResponseEntity<RidicDto> getRidicByCisloOp(@RequestParam String cisloOp, @RequestHeader("reCAPTCHA-Token") String recaptchaToken) throws ReCaptchaException, BaseException {
         RidicDto ridic = vratniceService.getRidicByCisloOp(cisloOp);
         if (ridic == null) {
             return ResponseEntity.notFound().build();

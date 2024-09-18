@@ -53,20 +53,8 @@ public class PovoleniVjezduVozidlaService {
 
 
     public PovoleniVjezduVozidlaDto create(PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto) {
-        if (povoleniVjezduVozidlaDto.getRidic() != null) {
-            RidicDto savedRidic =  vratniceService.saveRidic(povoleniVjezduVozidlaDto.getRidic());
-            povoleniVjezduVozidlaDto.setRidic(savedRidic);
-        }
-
-        SpolecnostDto savedSpolecnostZadatele = vratniceService.saveSpolecnost(povoleniVjezduVozidlaDto.getSpolecnostZadatele());
-        SpolecnostDto savedSpolecnostVozidla = vratniceService.saveSpolecnost(povoleniVjezduVozidlaDto.getSpolecnostVozidla());
-
-        povoleniVjezduVozidlaDto.setSpolecnostZadatele(savedSpolecnostZadatele);
-        povoleniVjezduVozidlaDto.setSpolecnostVozidla(savedSpolecnostVozidla);
-
-        //TODO: zaslání na žádosti
-
-        return povoleniVjezduVozidlaDto;
+        PovoleniVjezduVozidlaDto savedPovoleni =  vratniceService.savePovoleni(povoleniVjezduVozidlaDto);
+        return savedPovoleni;
     }
 
     public Set<PovoleniVjezduVozidlaDto>  processPovoleniCsvData(MultipartFile file) throws IOException, ParseException, BaseException {
@@ -134,7 +122,7 @@ public class PovoleniVjezduVozidlaService {
                     RidicDto ridicDto = new RidicDto();
 
                     RidicDto existedRidic = vratniceService.getRidicByCisloOp(csvLine.getRidic_cisloOp());
-                    if (existedRidic == null) {
+                    if (existedRidic == null || existedRidic.getIdRidic() == null) {
                         ridicDto.setJmeno(csvLine.getRidic_jmeno());
                         ridicDto.setPrijmeni(csvLine.getRidic_prijmeni());
                         ridicDto.setCisloOp(csvLine.getRidic_cisloOp());
