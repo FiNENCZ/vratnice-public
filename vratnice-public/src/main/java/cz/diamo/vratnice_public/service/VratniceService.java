@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.diamo.vratnice_public.annotation.TransactionalROE;
+import cz.diamo.vratnice_public.configuration.AppProperties;
 import cz.diamo.vratnice_public.dto.LokalitaDto;
 import cz.diamo.vratnice_public.dto.PovoleniVjezduVozidlaDto;
 import cz.diamo.vratnice_public.dto.RidicDto;
@@ -42,13 +44,24 @@ public class VratniceService {
     @Autowired
     private RestOperations restVratnice;
 
-
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private AppProperties appProperties;
+
+    private HttpEntity<Void> createHttpEntityWithAuth() {
+        String username = appProperties.getVratniceApiUsername();
+        String password = appProperties.getVratniceApiPassword();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth(username, password);
+        return new HttpEntity<>(headers);
+    }
+
     @TransactionalROE
     public List<LokalitaDto> seznamLokalit(String idZavod) {
-        String url = "/vratnice-public/lokalita/list";
+        String url = "/rest/lokalita/list";
         String lang = LocaleContextHolder.getLocale().getLanguage();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
@@ -56,7 +69,12 @@ public class VratniceService {
                 .queryParam("lang", lang);
 
         try {
-            LokalitaDto[] response = restVratnice.getForObject(builder.toUriString(), LokalitaDto[].class);
+            LokalitaDto[] response = restVratnice.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                createHttpEntityWithAuth(),
+                LokalitaDto[].class
+            ).getBody();
             return Arrays.asList(response);
         } catch (RestClientException e) {
 
@@ -67,7 +85,7 @@ public class VratniceService {
 
     @TransactionalROE
     public List<ZavodDto> seznamZavodu(Boolean aktivni, String idZavod) {
-        String url = "/vratnice-public/zavod/list";
+        String url = "/rest/zavod/list";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("aktivni", aktivni)
@@ -75,7 +93,12 @@ public class VratniceService {
                 .queryParam("lang", lang);
 
         try {
-            ZavodDto[] response = restVratnice.getForObject(builder.toUriString(), ZavodDto[].class);
+            ZavodDto[] response = restVratnice.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                createHttpEntityWithAuth(),
+                ZavodDto[].class
+            ).getBody();
             return Arrays.asList(response);
         } catch (RestClientException e) {
 
@@ -85,14 +108,20 @@ public class VratniceService {
 
     @TransactionalROE
     public List<VozidloTypDto> seznamVozidloTyp(Boolean withIZS) {
-        String url = "/vratnice-public/vozidlo-typ/list";
+        String url = "/rest/vozidlo-typ/list";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("withIZS", withIZS)
                 .queryParam("lang", lang);
-
+        
+    
         try {
-            VozidloTypDto[] response = restVratnice.getForObject(builder.encode().toUriString(), VozidloTypDto[].class);
+            VozidloTypDto[] response = restVratnice.exchange(
+                    builder.toUriString(),
+                    HttpMethod.GET,
+                    createHttpEntityWithAuth(),
+                    VozidloTypDto[].class
+            ).getBody();
             return Arrays.asList(response);
         } catch (RestClientException e) {
 
@@ -104,14 +133,19 @@ public class VratniceService {
     @TransactionalROE
     public VozidloTypDto getVozidloTypByNazev(String nazev) throws BaseException {
         try {
-        HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
         String lang = LocaleContextHolder.getLocale().getLanguage();
         HashMap<String, String> params = new HashMap<>();
         params.put("nazev", nazev); 
         params.put("lang", lang);
-        
-        ResponseEntity<VozidloTypDto> result = restVratnice.exchange("/vratnice-public/vozidlo-typ/get-by-nazev?nazev={nazev}&lang={lang}", HttpMethod.GET, requestEntity, VozidloTypDto.class, params);
-        
+
+        ResponseEntity<VozidloTypDto> result = restVratnice.exchange(
+            "/rest/vozidlo-typ/get-by-nazev?nazev={nazev}&lang={lang}",
+            HttpMethod.GET,
+            createHttpEntityWithAuth(),
+            VozidloTypDto.class,
+            params
+        );
+    
         if (result.getStatusCode().isError())
             throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
         return result.getBody();
@@ -142,14 +176,19 @@ public class VratniceService {
     @TransactionalROE
     public RidicDto getRidicByCisloOp(String cisloOp) throws BaseException {
         try {
-            HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
             String lang = LocaleContextHolder.getLocale().getLanguage();
             HashMap<String, String> params = new HashMap<>();
             params.put("cisloOp", cisloOp); 
             params.put("lang", lang);
-            
-            ResponseEntity<RidicDto> result = restVratnice.exchange("/vratnice-public/ridic/get-by-cislo-op?cisloOp={cisloOp}&lang={lang}", HttpMethod.GET, requestEntity, RidicDto.class, params);
-            
+
+            ResponseEntity<RidicDto> result = restVratnice.exchange(
+                    "/rest/ridic/get-by-cislo-op?cisloOp={cisloOp}&lang={lang}",
+                    HttpMethod.GET,
+                    createHttpEntityWithAuth(),
+                    RidicDto.class,
+                    params
+            );
+
             if (result.getStatusCode().isError())
                 throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
             return result.getBody();
@@ -180,13 +219,18 @@ public class VratniceService {
 
     @TransactionalROE
     public List<StatDto> seznamStatu() {
-        String url = "/vratnice-public/stat/list";
+        String url = "/rest/stat/list";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
             .queryParam("lang", lang);;
 
         try {
-            StatDto[] response = restVratnice.getForObject(builder.toUriString(), StatDto[].class);
+            StatDto[] response = restVratnice.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                createHttpEntityWithAuth(),
+                StatDto[].class
+            ).getBody();
             return Arrays.asList(response);
         } catch (RestClientException e) {
 
@@ -197,15 +241,20 @@ public class VratniceService {
     @TransactionalROE
     public StatDto getStatByNazev(String nazev) throws BaseException {
         try {
-        HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
         String lang = LocaleContextHolder.getLocale().getLanguage();
-
 
         HashMap<String, String> params = new HashMap<>();
         params.put("nazev", nazev); 
         params.put("lang", lang);
         
-        ResponseEntity<StatDto> result = restVratnice.exchange("/vratnice-public/stat/get-by-nazev?nazev={nazev}&lang={lang}", HttpMethod.GET, requestEntity, StatDto.class, params);
+        ResponseEntity<StatDto> result = restVratnice.exchange(
+            "/rest/stat/get-by-nazev?nazev={nazev}&lang={lang}",
+            HttpMethod.GET,
+            createHttpEntityWithAuth(),
+            StatDto.class,
+            params
+        );
+
         if (result.getStatusCode().isError())
             throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
         return result.getBody();
@@ -235,14 +284,22 @@ public class VratniceService {
 
     @TransactionalROE
     public RidicDto saveRidic(RidicDto ridicDto) {
-        String url = "/vratnice-public/ridic/save";
+        String url = "/rest/ridic/save";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
             .queryParam("lang", lang);
 
         try {
-            RidicDto response = restVratnice.postForObject(builder.toUriString(), ridicDto, RidicDto.class);
-            return response;
+            HttpEntity<RidicDto> requestEntity = new HttpEntity<>(ridicDto, createHttpEntityWithAuth().getHeaders());
+
+            ResponseEntity<RidicDto> responseEntity = restVratnice.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    requestEntity,
+                    RidicDto.class
+            );
+    
+            return responseEntity.getBody();
         } catch (RestClientException e) {
 
             throw new RestClientException(String.format("Pri volání Vránice došlo k chybě./n%s", e));
@@ -251,14 +308,19 @@ public class VratniceService {
 
     @TransactionalROE
     public List<SpolecnostDto> seznamSpolecnosti() {
-        String url = "/vratnice-public/spolecnost/list";
+        String url = "/rest/spolecnost/list";
         String lang = LocaleContextHolder.getLocale().getLanguage();
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
                 .queryParam("lang", lang);
 
         try {
-            SpolecnostDto[] response = restVratnice.getForObject(builder.toUriString(), SpolecnostDto[].class);
+            SpolecnostDto[] response = restVratnice.exchange(
+                builder.toUriString(),
+                HttpMethod.GET,
+                createHttpEntityWithAuth(),
+                SpolecnostDto[].class
+            ).getBody();
             return Arrays.asList(response);
         } catch (RestClientException e) {
 
@@ -269,14 +331,19 @@ public class VratniceService {
     @TransactionalROE
     public SpolecnostDto getSpolecnostByNazev(String nazev) throws BaseException {
         try {
-            HttpEntity<Void> requestEntity = new HttpEntity<Void>(null, null);
             String lang = LocaleContextHolder.getLocale().getLanguage();
             HashMap<String, String> params = new HashMap<>();
             params.put("nazev", nazev); 
             params.put("lang", lang);
             
-            ResponseEntity<SpolecnostDto> result = restVratnice.exchange("/vratnice-public/spolecnost/get-by-nazev?nazev={nazev}&lang={lang}", HttpMethod.GET, requestEntity, SpolecnostDto.class, params);
-            
+            ResponseEntity<SpolecnostDto> result = restVratnice.exchange(
+                    "/rest/spolecnost/get-by-nazev?nazev={nazev}&lang={lang}",
+                    HttpMethod.GET,
+                    createHttpEntityWithAuth(),
+                    SpolecnostDto.class,
+                    params
+            );
+
             if (result.getStatusCode().isError())
                 throw new BaseException(String.format("Při volání Vrátnice došlo k chybě./n%s", result.getStatusCode()));
             return result.getBody();
@@ -306,14 +373,22 @@ public class VratniceService {
 
     @TransactionalROE
     public SpolecnostDto saveSpolecnost(SpolecnostDto spolecnost) {
-        String url = "/vratnice-public/spolecnost/save";
+        String url = "/rest/spolecnost/save";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
             .queryParam("lang", lang);
 
         try {
-            SpolecnostDto response = restVratnice.postForObject(builder.toUriString(), spolecnost, SpolecnostDto.class);
-            return response;
+            HttpEntity<SpolecnostDto> requestEntity = new HttpEntity<>(spolecnost, createHttpEntityWithAuth().getHeaders());
+
+            ResponseEntity<SpolecnostDto> responseEntity = restVratnice.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    requestEntity,
+                    SpolecnostDto.class
+            );
+    
+            return responseEntity.getBody();
         } catch (RestClientException e) {
 
             throw new RestClientException(String.format("Pri volání Vránice došlo k chybě./n%s", e));
@@ -322,14 +397,21 @@ public class VratniceService {
 
     @TransactionalROE
     public PovoleniVjezduVozidlaDto savePovoleni(PovoleniVjezduVozidlaDto povoleniVjezduVozidlaDto) {
-        String url = "/vratnice-public/povoleni-vjezdu-vozidla/save";
+        String url = "/rest/povoleni-vjezdu-vozidla/save";
         String lang = LocaleContextHolder.getLocale().getLanguage();
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url)
             .queryParam("lang", lang);
 
         try {
-            PovoleniVjezduVozidlaDto response = restVratnice.postForObject(builder.toUriString(), povoleniVjezduVozidlaDto, PovoleniVjezduVozidlaDto.class);
-            return response;
+            HttpEntity<PovoleniVjezduVozidlaDto> requestEntity = new HttpEntity<>(povoleniVjezduVozidlaDto, createHttpEntityWithAuth().getHeaders());
+
+            ResponseEntity<PovoleniVjezduVozidlaDto> responseEntity = restVratnice.exchange(
+                    builder.toUriString(),
+                    HttpMethod.POST,
+                    requestEntity,
+                    PovoleniVjezduVozidlaDto.class
+            );
+            return responseEntity.getBody();
         } catch (RestClientException e) {
 
             throw new RestClientException(String.format("Pri volání Vránice došlo k chybě./n%s", e));

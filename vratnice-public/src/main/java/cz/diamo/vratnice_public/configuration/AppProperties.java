@@ -13,6 +13,10 @@ public class AppProperties {
 
     private String vratniceApiUrl;
 
+    private String vratniceApiUsername;
+
+    private String vratniceApiPassword;
+
     private String zadostiApiUrl;
 
 }
