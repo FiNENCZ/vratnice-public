@@ -43,8 +43,6 @@ public class ReCaptchaService {
             return newReCaptchaResponse;
         }
 
-        logger.info(reCaptchaResponse);
-
         if (reCaptchaResponse.isSuccess() && (reCaptchaResponse.getScore() < reCaptchaProperties.getThreshold())) {
             reCaptchaResponse.setSuccess(false);
             reCaptchaResponse.setErrorMessage(messageSource.getMessage("recaptcha.low-score", null, LocaleContextHolder.getLocale()));

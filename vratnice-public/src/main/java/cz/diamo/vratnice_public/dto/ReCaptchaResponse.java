@@ -26,6 +26,4 @@ public class ReCaptchaResponse {
     List<String> errorCodes;
 
     private String errorMessage;
-
-
 }

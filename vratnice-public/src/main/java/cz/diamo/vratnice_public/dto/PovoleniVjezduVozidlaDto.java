@@ -42,6 +42,7 @@ public class PovoleniVjezduVozidlaDto implements Serializable {
     @NotBlank(message = "{povoleni.vjezdu.vozidla.email.require}")
     private String emailZadatele;
 
+    @NotBlank(message = "{povoleni.vjezdu.vozidel.duvod.require}")
     private String duvodZadosti;
 
     @NotNull(message = "{povoleni.vjezdu.vozidla.rz_vozidla.require}")
