@@ -8,7 +8,7 @@
             "type": "java",
             "name": "Vratnice-public dev",
             "request": "launch",
-            "mainClass": "cz.diamo.vratnice_public.VratnicePublicApplication",
+            "mainClass": "cz.dp.vratnice_public.VratnicePublicApplication",
             "projectName": "vratnice-public",
             "args": "--spring.profiles.active=dev",
             "vmArgs": "-Dspring.profiles.active=dev"
